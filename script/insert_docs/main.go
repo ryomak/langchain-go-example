@@ -17,23 +17,33 @@ func main() {
 
 	ctx := context.Background()
 
-	file, err := os.Open("./langchain/llm.go")
-	if err != nil {
-		panic(err)
+	filePaths := []string{
+		"./langchain/llm.go",
+		"./docker-compose.yml",
+		"./LICENSE",
+		"go.mod",
 	}
+	for _, filePath := range filePaths {
 
-	docs, err := documentloaders.NewText(file).LoadAndSplit(
-		context.Background(),
-		textsplitter.NewRecursiveCharacter(),
-	)
-	if err != nil {
-		panic(err)
-	}
-
-	for _, v := range docs {
-		if err := chain.AddDocument(ctx, "default", v.PageContent); err != nil {
+		file, err := os.Open(filePath)
+		if err != nil {
 			panic(err)
 		}
+
+		docs, err := documentloaders.NewText(file).LoadAndSplit(
+			context.Background(),
+			textsplitter.NewRecursiveCharacter(),
+		)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, v := range docs {
+			if err := chain.AddDocument(ctx, "default", v.PageContent); err != nil {
+				panic(err)
+			}
+		}
+
 	}
 	fmt.Println("done")
 }

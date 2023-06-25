@@ -11,7 +11,7 @@ func main() {
 		panic(err)
 	}
 	ctx := context.Background()
-	question := "AddDocument関数について教えて"
+	question := "module github.com/ryomak/llm-qa-go-example で利用しているパッケージ教えて"
 	result, err := llm.Run(ctx, question)
 	if err != nil {
 		panic(err)
