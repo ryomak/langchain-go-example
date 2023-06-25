@@ -11,7 +11,7 @@ func main() {
 		panic(err)
 	}
 	ctx := context.Background()
-	question := "メロスの家族は？"
+	question := "AddDocument関数について教えて"
 	result, err := llm.Run(ctx, question)
 	if err != nil {
 		panic(err)

@@ -3,7 +3,7 @@ module github.com/ryomak/llm-qa-go-example
 go 1.20
 
 require (
-	github.com/tmc/langchaingo v0.0.0-20230624083420-baeba9a635a9
+	github.com/tmc/langchaingo v0.0.0-20230625081011-4d9d55dbcaba
 	github.com/weaviate/weaviate v1.19.9
 	github.com/weaviate/weaviate-go-client/v4 v4.8.1
 )
@@ -21,6 +21,7 @@ require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
+	github.com/dlclark/regexp2 v1.8.1 // indirect
 	github.com/go-openapi/analysis v0.21.2 // indirect
 	github.com/go-openapi/errors v0.20.3 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
@@ -45,6 +46,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
+	github.com/pkoukk/tiktoken-go v0.1.2 // indirect
 	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
 	go.mongodb.org/mongo-driver v1.11.3 // indirect

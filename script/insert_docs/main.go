@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-
 	chain, err := langchain.New()
 	if err != nil {
 		panic(err)
@@ -18,7 +17,7 @@ func main() {
 
 	ctx := context.Background()
 
-	file, err := os.Open("./script/insert_docs/hashire_merosu.txt")
+	file, err := os.Open("./langchain/llm.go")
 	if err != nil {
 		panic(err)
 	}

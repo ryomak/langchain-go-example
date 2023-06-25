@@ -24,7 +24,7 @@ func main() {
 		Properties: []*models.Property{
 			{
 				Name:        langchain.WeaviatePropertyTextName,
-				Description: "question",
+				Description: "document text",
 				DataType:    []string{"text"},
 			},
 			{

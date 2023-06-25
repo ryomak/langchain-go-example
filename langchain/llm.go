@@ -14,7 +14,7 @@ import (
 const (
 	WeaviateIndexName = "QA"
 
-	WeaviatePropertyTextName      = "question"
+	WeaviatePropertyTextName      = "text"
 	WeaviatePropertyNameSpaceName = "namespace"
 	WeaviatePropertyKind          = "kind"
 )
