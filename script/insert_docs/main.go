@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/ryomak/llm-qa-go-example/langchain"
 	"github.com/tmc/langchaingo/documentloaders"
-	"github.com/tmc/langchaingo/textsplitter"
 	"os"
 )
 
@@ -17,33 +16,20 @@ func main() {
 
 	ctx := context.Background()
 
-	filePaths := []string{
-		"./langchain/llm.go",
-		"./docker-compose.yml",
-		"./LICENSE",
-		"go.mod",
+	file, err := os.Open("./script/insert_docs/qa.csv")
+	if err != nil {
+		panic(err)
 	}
-	for _, filePath := range filePaths {
-
-		file, err := os.Open(filePath)
-		if err != nil {
+	loader := documentloaders.NewCSV(file)
+	docs, err := loader.Load(context.Background())
+	if err != nil {
+		panic(err)
+	}
+	for _, v := range docs {
+		fmt.Println(v.PageContent)
+		if err := chain.AddDocument(ctx, "default", v.PageContent); err != nil {
 			panic(err)
 		}
-
-		docs, err := documentloaders.NewText(file).LoadAndSplit(
-			context.Background(),
-			textsplitter.NewRecursiveCharacter(),
-		)
-		if err != nil {
-			panic(err)
-		}
-
-		for _, v := range docs {
-			if err := chain.AddDocument(ctx, "default", v.PageContent); err != nil {
-				panic(err)
-			}
-		}
-
 	}
 	fmt.Println("done")
 }

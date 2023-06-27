@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/ryomak/llm-qa-go-example/langchain"
 )
 
@@ -11,10 +12,10 @@ func main() {
 		panic(err)
 	}
 	ctx := context.Background()
-	question := "module github.com/ryomak/llm-qa-go-example で利用しているパッケージ教えて"
-	result, err := llm.Run(ctx, question)
+	question := "Nissyとはどういう人ですか?"
+	result, err := llm.QA(ctx, question)
 	if err != nil {
 		panic(err)
 	}
-	println(result)
+	fmt.Println(result)
 }

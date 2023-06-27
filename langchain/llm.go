@@ -6,13 +6,14 @@ import (
 	"github.com/tmc/langchaingo/embeddings"
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/openai"
+	"github.com/tmc/langchaingo/prompts"
 	"github.com/tmc/langchaingo/schema"
 	"github.com/tmc/langchaingo/vectorstores"
 	"github.com/tmc/langchaingo/vectorstores/weaviate"
 )
 
 const (
-	WeaviateIndexName = "QA"
+	WeaviateIndexName = "QA_20230626_1"
 
 	WeaviatePropertyTextName      = "text"
 	WeaviatePropertyNameSpaceName = "namespace"
@@ -62,14 +63,31 @@ func (l *chain) AddDocument(ctx context.Context, kind string, content string) er
 	})
 }
 
-func (l *chain) Run(ctx context.Context, question string) (string, error) {
+func (l *chain) QA(ctx context.Context, question string) (string, error) {
+	prompt := prompts.NewPromptTemplate(
+		`あなたはカスタマーサポートです。丁寧な回答を心がけてください。
+以下のContextを使用して質問に答えてください。
+Contextから答えがわからない場合は、「わかりません」と回答してください。
+
+Context:
+{{.context}}
+質問:
+{{.question}}
+`,
+
+		[]string{"context", "question"},
+	)
+
+	combineChain := chains.NewStuffDocuments(chains.NewLLMChain(l.llm, prompt))
+
 	result, err := chains.Run(
 		ctx,
-		chains.NewRetrievalQAFromLLM(
-			l.llm,
-			vectorstores.ToRetriever(l.store, 1),
+		chains.NewRetrievalQA(
+			combineChain,
+			vectorstores.ToRetriever(l.store, 3),
 		),
 		question,
+		chains.WithModel("gpt-4"),
 	)
 	if err != nil {
 		return "", err
