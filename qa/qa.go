@@ -1,4 +1,4 @@
-package langchain
+package qa
 
 import (
 	"context"
@@ -13,19 +13,18 @@ import (
 )
 
 const (
-	WeaviateIndexName = "QA_20230626_1"
+	WeaviateIndexName = "QA_20230701_2"
 
 	WeaviatePropertyTextName      = "text"
 	WeaviatePropertyNameSpaceName = "namespace"
-	WeaviatePropertyKind          = "kind"
 )
 
-type chain struct {
-	llm   llms.LLM
+type qa struct {
+	llm   llms.LanguageModel
 	store vectorstores.VectorStore
 }
 
-func New() (*chain, error) {
+func New() (*qa, error) {
 	llm, err := openai.New()
 	if err != nil {
 		return nil, err
@@ -39,40 +38,38 @@ func New() (*chain, error) {
 		weaviate.WithHost("localhost:8080"),
 		weaviate.WithEmbedder(e),
 		weaviate.WithIndexName(WeaviateIndexName),
-		weaviate.WithQueryAttrs([]string{WeaviatePropertyKind}),
 		weaviate.WithTextKey(WeaviatePropertyTextName),
 		weaviate.WithNameSpaceKey(WeaviatePropertyNameSpaceName),
 	)
 	if err != nil {
 		return nil, err
 	}
-	return &chain{
+	return &qa{
 		llm:   llm,
 		store: store,
 	}, nil
 }
 
-func (l *chain) AddDocument(ctx context.Context, kind string, content string) error {
+func (l *qa) AddDocument(ctx context.Context, content string) error {
 	return l.store.AddDocuments(ctx, []schema.Document{
 		{
 			PageContent: content,
-			Metadata: map[string]any{
-				WeaviatePropertyKind: kind,
-			},
 		},
 	})
 }
 
-func (l *chain) QA(ctx context.Context, question string) (string, error) {
+func (l *qa) Answer(ctx context.Context, question string) (string, error) {
 	prompt := prompts.NewPromptTemplate(
-		`あなたはカスタマーサポートです。丁寧な回答を心がけてください。
-以下のContextを使用して質問に答えてください。
-Contextから答えがわからない場合は、「わかりません」と回答してください。
+		`## 依頼
+あなたはカスタマーサポートです。丁寧な回答を心がけてください。
+以下の過去の質問と回答を使用して,質問に答えてください。
+過去の質問と回答から答えがわからない場合は、「わかりません」と回答してください。
 
-Context:
-{{.context}}
-質問:
+## 質問
 {{.question}}
+
+## 過去の質問と回答
+{{.context}}
 `,
 
 		[]string{"context", "question"},

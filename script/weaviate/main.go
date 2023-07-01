@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/ryomak/llm-qa-go-example/langchain"
+	"github.com/ryomak/llm-qa-go-example/qa"
 	"github.com/weaviate/weaviate-go-client/v4/weaviate"
 	"github.com/weaviate/weaviate/entities/models"
 )
@@ -15,7 +15,7 @@ func main() {
 	})
 	ctx := context.Background()
 	if err := weaviateClient.Schema().ClassCreator().WithClass(&models.Class{
-		Class:       langchain.WeaviateIndexName,
+		Class:       qa.WeaviateIndexName,
 		Description: "qa class",
 		VectorIndexConfig: map[string]any{
 			"distance": "cosine",
@@ -23,18 +23,13 @@ func main() {
 		ModuleConfig: map[string]any{},
 		Properties: []*models.Property{
 			{
-				Name:        langchain.WeaviatePropertyTextName,
+				Name:        qa.WeaviatePropertyTextName,
 				Description: "document text",
 				DataType:    []string{"text"},
 			},
 			{
-				Name:        langchain.WeaviatePropertyNameSpaceName,
+				Name:        qa.WeaviatePropertyNameSpaceName,
 				Description: "namespace",
-				DataType:    []string{"text"},
-			},
-			{
-				Name:        langchain.WeaviatePropertyKind,
-				Description: "kind",
 				DataType:    []string{"text"},
 			},
 		},

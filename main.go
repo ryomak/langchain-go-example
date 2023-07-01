@@ -3,17 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/ryomak/llm-qa-go-example/langchain"
+	"github.com/ryomak/llm-qa-go-example/qa"
 )
 
 func main() {
-	llm, err := langchain.New()
+	qaBot, err := qa.New()
 	if err != nil {
 		panic(err)
 	}
 	ctx := context.Background()
-	question := "Nissyとはどういう人ですか?"
-	result, err := llm.QA(ctx, question)
+	question := "Nissyの誕生日は?"
+	result, err := qaBot.Answer(ctx, question)
 	if err != nil {
 		panic(err)
 	}

@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/ryomak/llm-qa-go-example/langchain"
+	"github.com/ryomak/llm-qa-go-example/qa"
 	"github.com/tmc/langchaingo/documentloaders"
 	"os"
 )
 
 func main() {
-	chain, err := langchain.New()
+	chain, err := qa.New()
 	if err != nil {
 		panic(err)
 	}
@@ -27,7 +27,7 @@ func main() {
 	}
 	for _, v := range docs {
 		fmt.Println(v.PageContent)
-		if err := chain.AddDocument(ctx, "default", v.PageContent); err != nil {
+		if err := chain.AddDocument(ctx, v.PageContent); err != nil {
 			panic(err)
 		}
 	}
